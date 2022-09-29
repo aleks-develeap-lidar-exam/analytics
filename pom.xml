@@ -11,6 +11,7 @@
     <properties>
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.source>1.8</maven.compiler.source>
+        <artifactory>http://artifactory:8081/artifactory</artifactory>
     </properties>
     
     <dependencies>
@@ -38,4 +39,18 @@
 
         </plugins>
     </build>
+
+    <distributionManagement>
+    <repository>
+            <id>central</id>
+            <name>exam-libs-release</name>
+            <url>${artifactory}/exam-libs-release</url>
+    </repository>
+    <snapshotRepository>
+            <id>snapshots</id>
+            <name>exam-libs-snapshot</name>
+            <url>${artifactory}/exam-libs-snapshot</url>
+    </snapshotRepository>
+    </distributionManagement>
+
 </project>
