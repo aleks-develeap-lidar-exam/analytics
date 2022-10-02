@@ -20,6 +20,24 @@ pipeline {
 
     stages {
 
+    stage("Set E2E flag") {
+            steps {
+                script{
+                    GIT_MESSAGE = sh (
+                    script: "git log --format=%B -n 1 $GIT_COMMIT",
+                    returnStdout: true
+                    ).trim()
+                    if ("${GIT_MESSAGE}".contains('#e2e')){
+                        env.E2E_TEST = true
+                        
+                    }
+                }
+
+            }
+        }
+
+
+
     stage('Calculate version'){
         when {
                 branch "release/*"
@@ -79,13 +97,10 @@ pipeline {
             }     
         } 
         steps{
-            sh "mkdir test"
-            //add different x.y ver here
-            //get newest telemetry version
-            
+            sh "mkdir test"            
             withCredentials([usernamePassword(credentialsId: 'aleks_jfrog', passwordVariable: 'password', usernameVariable: 'myUser')]) {
                 script{
-
+            //get newest telemetry version
             TELEMETRY_VERSION = sh(returnStdout: true, script: "curl -u $myUser:$password http://artifactory:8082/artifactory/exam-libs-release-local/com/lidar/telemetry/maven-metadata.xml | grep '<version>' | tail -1 | grep -o '[0-9].[0-9].[0-9]'").trim()
             }
                 
@@ -97,6 +112,10 @@ pipeline {
             //curl gitlab for the test file
             withCredentials([string(credentialsId: 'testing_api', variable: 'token')]) {
                 sh "curl --header 'PRIVATE-TOKEN: $token' http://gitlab/api/v4/projects/8/repository/files/tests-sanity.txt/raw?ref=main --output test/tests.txt"
+            }
+
+            if(ENV.BRANCH_NAME != 'release/*'){
+                sh "cp target/analytics-99-SNAPSHOT.jar test/analytics.jar"
             }
 
             dir('test'){
