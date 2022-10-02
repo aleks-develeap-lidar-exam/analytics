@@ -91,7 +91,7 @@ pipeline {
                 
                 sh "curl -u $myUser:$password http://artifactory:8082/artifactory/exam-libs-snapshot-local/com/lidar/simulator/99-SNAPSHOT/simulator-99-20220929.101554-1.jar --output test/simulator.jar"
 
-            sh "curl -u $myUser:$password http://artifactory:8082/artifactory/exam-libs-release-local/com/lidar/telemetry/{TELEMETRY_VERSION }/telemetry-{TELEMETRY_VERSION}.jar --output test/telemetry.jar"
+            sh "curl -u $myUser:$password http://artifactory:8082/artifactory/exam-libs-release-local/com/lidar/telemetry/${TELEMETRY_VERSION }/telemetry-${TELEMETRY_VERSION}.jar --output test/telemetry.jar"
         
             }
             //curl gitlab for the test file
