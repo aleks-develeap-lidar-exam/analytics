@@ -114,11 +114,11 @@ pipeline {
                 sh "curl --header 'PRIVATE-TOKEN: $token' http://gitlab/api/v4/projects/8/repository/files/tests-sanity.txt/raw?ref=main --output test/tests.txt"
             }
             script {
-            if( env.BRANCH_NAME != 'release/*' ){
-                sh "cp target/analytics-99-SNAPSHOT.jar test/analytics.jar"
+            if( env.BRANCH_NAME.contains('release') ){
+                sh "cp target/analytics-${env.VERSION}.jar test/analytics.jar"
             }
             else{
-                sh "cp target/analytics-{env.VERSION}.jar test/analytics.jar"
+                sh "cp target/analytics-99-SNAPSHOT.jar test/analytics.jar"
             }
             }
 
