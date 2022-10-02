@@ -113,9 +113,10 @@ pipeline {
             withCredentials([string(credentialsId: 'testing_api', variable: 'token')]) {
                 sh "curl --header 'PRIVATE-TOKEN: $token' http://gitlab/api/v4/projects/8/repository/files/tests-sanity.txt/raw?ref=main --output test/tests.txt"
             }
-
-            if(ENV.BRANCH_NAME != 'release/*'){
+            script {
+            if( env.BRANCH_NAME != 'release/*' ){
                 sh "cp target/analytics-99-SNAPSHOT.jar test/analytics.jar"
+            }
             }
 
             dir('test'){
