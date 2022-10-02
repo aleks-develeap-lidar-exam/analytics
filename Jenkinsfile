@@ -99,7 +99,7 @@ pipeline {
                 sh "curl --header 'PRIVATE-TOKEN: $token' http://gitlab/api/v4/projects/8/repository/files/tests-sanity.txt/raw?ref=main --output test/tests.txt"
             }
 
-            dir(test){
+            dir('test'){
                 sh "java -cp simulator.jar:analytics.jar:telemetry.jar com.lidar.simulation.Simulator"
             }
             sh "rm -r test"
