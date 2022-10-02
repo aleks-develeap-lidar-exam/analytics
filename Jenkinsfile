@@ -97,7 +97,7 @@ pipeline {
             }     
         } 
         steps{
-            sh "mkdir test"            
+            sh "mkdir -p test"            
             withCredentials([usernamePassword(credentialsId: 'aleks_jfrog', passwordVariable: 'password', usernameVariable: 'myUser')]) {
                 script{
             //get newest telemetry version
@@ -116,6 +116,9 @@ pipeline {
             script {
             if( env.BRANCH_NAME != 'release/*' ){
                 sh "cp target/analytics-99-SNAPSHOT.jar test/analytics.jar"
+            }
+            else{
+                sh "cp target/analytics-{env.VERSION}.jar test/analytics.jar"
             }
             }
 
